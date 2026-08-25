@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raksha Bandhan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Eczar:wght@400..800&family=Kalam:wght@300;400;700&family=Peralta&family=Rozha+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rakhi.css">
+</head>
+<body>
+
+<canvas id="trailCanvas"></canvas>
+<div id="dot"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="intro" id="intro">
+    <p class="intro-loading show" id="introLoading">✨ something special is loading<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+
+    <div class="intro-gift" id="introGift">
+      🎁
+      <span class="gift-hint">tap to open</span>
+    </div>
+
+    <div class="thread-half thread-left" id="threadLeft"></div>
+    <div class="thread-half thread-right" id="threadRight"></div>
+
+    <div class="intro-wrist" id="introWrist">
+      <svg viewBox="0 0 200 120" fill="none">
+        <path d="M20 90 Q100 130 180 90 L180 60 Q100 20 20 60 Z" fill="#F0DFC0"/>
+      </svg>
+    </div>
+    <div class="intro-rakhi" id="introRakhi"></div>
+
+    <div class="intro-letter" id="introLetter">
+      <p class="letter-text">For the best brother — the one who's tied to me in every way that counts. Happy Raksha Bandhan.</p>
+    </div>
+
+    <div class="intro-finale" id="introFinale">
+      <span class="finale-heart">❤️</span>
+      <p class="finale-title">Happy Raksha Bandhan</p>
+      <p class="finale-hindi">भाई-बहन का ये रिश्ता, दुनिया में सबसे प्यारा</p>
+    </div>
+
+    <div class="intro-scrollcue" id="introScrollCue">scroll to continue ↓</div>
+  </div>
+</section>
+
+<!-- RAKHI SHOWCASE -->
+<section id="showcase">
+  <div class="rakhi-slot" id="showcaseRakhi"></div>
+  <p class="showcase-caption">tied in gold thread, meant to hold for a lifetime</p>
+</section>
+
+<!-- TIE INTERACTION -->
+<section id="tie">
+  <h2 class="tie-title">Tie the Rakhi</h2>
+  <p class="tie-sub">hold, drag, and let it rest on the wrist</p>
+  <div class="tie-stage" id="stage">
+    <svg id="wrist" viewBox="0 0 200 120" fill="none">
+      <path d="M20 90 Q100 130 180 90 L180 60 Q100 20 20 60 Z" fill="#F0DFC0"/>
+      <path d="M20 60 Q100 20 180 60" stroke="#D9BE8D" stroke-width="2" fill="none"/>
+    </svg>
+    <div class="drop-zone" id="dropZone"></div>
+    <div id="dragRakhi"></div>
+  </div>
+  <p class="hint" id="tieHint">every rakhi begins with someone holding out their wrist</p>
+</section>
+
+<!-- CARD -->
+<section id="card-section">
+  <h2 class="card-title">Your Card is Ready</h2>
+  <p class="card-sub">for the one who's tied to you, always</p>
+  <div class="thread-column">
+    <div class="name-input">
+      <label for="nameField">Who's it for?</label>
+      <input type="text" id="nameField" placeholder="Type their name..." maxlength="18">
+    </div>
+    <div class="thread-bead"></div>
+    <div class="flip-card" id="flipCard">
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="rakhi-mini" id="cardRakhi"></div>
+          <p>Happy Raksha Bandhan</p>
+          <div class="tap">tap to open</div>
+        </div>
+        <div class="face back">
+          <p class="msg" id="cardMsg">Whatever fights we've had, whatever distance comes between us — this thread says I've still got you. Always.</p>
+          <div class="sign">— with love, from your sibling</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINALE -->
+<section id="finale">
+  <div id="giftLayer"></div>
+  <p class="finale-text">Happy Raksha Bandhan</p>
+  <p class="finale-sub">may the thread outlast every argument</p>
+</section>
+
+<footer>made with love and chaos · sourav-coder</footer>
+
+<script>
+// ---------------- gold thread cursor trail ----------------
+const canvas = document.getElementById('trailCanvas');
+const ctx = canvas.getContext('2d');
+const dot = document.getElementById('dot');
+let W, H;
+function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+let points = [];
+const isTouch = matchMedia('(hover: none)').matches;
+if(!isTouch){
+  addEventListener('mousemove', e=>{
+    dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
+    points.push({x:e.clientX, y:e.clientY, life:1});
+    if(points.length > 34) points.shift();
+  });
+}
+function drawTrail(){
+  ctx.clearRect(0,0,W,H);
+  if(points.length > 1){
+    ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
+    for(let i=1;i<points.length;i++) ctx.lineTo(points[i].x, points[i].y);
+    ctx.strokeStyle = 'rgba(201,162,39,0.55)';
+    ctx.lineWidth = 2; ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.stroke();
+  }
+  points.forEach(p=>p.life-=0.03);
+  points = points.filter(p=>p.life>0);
+  requestAnimationFrame(drawTrail);
+}
+drawTrail();
+
+function petalBurst(x,y){
+  const cols = ['#C9A227','#5C0F1F','#E6C158','#7A1B2E'];
+  for(let i=0;i<22;i++){
+    const el = document.createElement('div');
+    const angle = Math.random()*Math.PI*2, dist = 60+Math.random()*120, size = 6+Math.random()*6;
+    el.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:${size}px; height:${size}px;
+      background:${cols[i%cols.length]}; border-radius:${Math.random()>.5?'50%':'2px'};
+      pointer-events:none; z-index:10001; transition:transform 1s cubic-bezier(.2,.7,.3,1), opacity 1s ease;`;
+    document.body.appendChild(el);
+    requestAnimationFrame(()=>{
+      el.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist+60}px) rotate(${Math.random()*360}deg)`;
+      el.style.opacity = '0';
+    });
+    setTimeout(()=>el.remove(), 1050);
+  }
+}
+
+// ---------------- realistic rakhi SVG generator ----------------
+function rakhiSVG(id){
+  const petals = 8, gotaCount = 28, R = 100;
+  let petalPaths = '';
+  for(let i=0;i<petals;i++){
+    const a = (360/petals)*i;
+    petalPaths += `<path transform="rotate(${a} 100 100)" d="M100 100 Q112 68 100 40 Q88 68 100 100 Z" fill="${i%2===0?'#7A1B2E':'#C9A227'}" stroke="#5C0F1F" stroke-width="1.2"/>`;
+  }
+  let gota = '';
+  for(let i=0;i<gotaCount;i++){
+    const a = (Math.PI*2/gotaCount)*i;
+    const cx = 100+Math.cos(a)*58, cy = 100+Math.sin(a)*58;
+    gota += `<circle cx="${cx}" cy="${cy}" r="2.6" fill="#E6C158"/>`;
+  }
+  return `
+  <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="0" x2="100" y2="42" stroke="#C9A227" stroke-width="3"/>
+    <g>${petalPaths}</g>
+    <circle cx="100" cy="100" r="34" fill="#5C0F1F" stroke="#C9A227" stroke-width="2"/>
+    <circle cx="100" cy="100" r="20" fill="#FBF3E3" stroke="#C9A227" stroke-width="1.5"/>
+    <circle cx="100" cy="100" r="9" fill="#C9A227"/>
+    <g>${gota}</g>
+    <g stroke="#C9A227" stroke-width="2.4" stroke-linecap="round">
+      <path d="M100 62 L80 44"/><path d="M100 62 L120 44"/>
+      <path d="M158 100 L176 100"/><path d="M42 100 L24 100"/>
+    </g>
+    <path d="M82 155 Q70 190 55 205 Q50 210 46 205" stroke="#7A1B2E" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M118 155 Q130 190 145 205 Q150 210 154 205" stroke="#C9A227" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="46" cy="207" r="4" fill="#C9A227"/>
+    <circle cx="154" cy="207" r="4" fill="#7A1B2E"/>
+  </svg>`;
+}
+document.getElementById('showcaseRakhi').innerHTML = rakhiSVG('showcase');
+document.getElementById('dragRakhi').innerHTML = rakhiSVG('drag');
+document.getElementById('cardRakhi').innerHTML = rakhiSVG('card');
+document.getElementById('introRakhi').innerHTML = rakhiSVG('intro');
+
+// ---------------- opening sequence ----------------
+function emojiBurst(x, y, emojis, count){
+  for(let i=0;i<count;i++){
+    const el = document.createElement('div');
+    const angle = Math.random()*Math.PI*2, dist = 70+Math.random()*160;
+    el.textContent = emojis[i % emojis.length];
+    el.style.cssText = `position:fixed; left:${x}px; top:${y}px; font-size:${1.2+Math.random()*1}rem;
+      pointer-events:none; z-index:10001; transition:transform 1.2s cubic-bezier(.2,.7,.3,1), opacity 1.2s ease;`;
+    document.body.appendChild(el);
+    requestAnimationFrame(()=>{
+      el.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist+80}px) rotate(${Math.random()*360}deg)`;
+      el.style.opacity = '0';
+    });
+    setTimeout(()=>el.remove(), 1250);
+  }
+}
+
+const introLoading = document.getElementById('introLoading');
+const introGift = document.getElementById('introGift');
+const threadLeft = document.getElementById('threadLeft');
+const threadRight = document.getElementById('threadRight');
+const introRakhi = document.getElementById('introRakhi');
+const introWrist = document.getElementById('introWrist');
+const introLetter = document.getElementById('introLetter');
+const introFinale = document.getElementById('introFinale');
+const introScrollCue = document.getElementById('introScrollCue');
+
+setTimeout(()=>{
+  introLoading.classList.remove('show');
+  setTimeout(()=> introGift.classList.add('show'), 400);
+}, 1700);
+
+introGift.addEventListener('click', function onGiftClick(){
+  introGift.removeEventListener('click', onGiftClick);
+  const r = introGift.getBoundingClientRect();
+  const cx = r.left + r.width/2, cy = r.top + r.height/2;
+  petalBurst(cx, cy);
+  introGift.classList.remove('show');
+
+  setTimeout(()=>{
+    threadLeft.classList.add('show');
+    threadRight.classList.add('show');
+  }, 500);
+
+  setTimeout(()=> introRakhi.classList.add('show'), 1500);
+
+  setTimeout(()=>{
+    introWrist.classList.add('show');
+    introRakhi.classList.add('settled');
+  }, 2400);
+
+  setTimeout(()=> introLetter.classList.add('show'), 3300);
+
+  setTimeout(()=>{
+    introLetter.classList.remove('show');
+    introWrist.classList.remove('show');
+    introRakhi.classList.remove('show');
+    threadLeft.classList.remove('show');
+    threadRight.classList.remove('show');
+    introFinale.classList.add('show');
+    const cx2 = innerWidth/2, cy2 = innerHeight/2.4;
+    emojiBurst(cx2, cy2, ['🌸','💛','✨','🧡','🌼'], 26);
+  }, 5100);
+
+  setTimeout(()=> introScrollCue.classList.add('show'), 6000);
+});
+
+// ---------------- drag to tie ----------------
+const dragEl = document.getElementById('dragRakhi');
+const stage = document.getElementById('stage');
+const dropZone = document.getElementById('dropZone');
+const tieHint = document.getElementById('tieHint');
+const cardSection = document.getElementById('card-section');
+let dragging=false, tied=false, offX=0, offY=0;
+function place(el,x,y){ el.style.left=x+'px'; el.style.top=y+'px'; }
+function initPos(){
+  const r = stage.getBoundingClientRect();
+  dragEl.style.position='absolute';
+  place(dragEl, r.width/2-55, 22);
+  place(dropZone, r.width/2-70, r.height/2-70);
+}
+addEventListener('load', initPos); addEventListener('resize', initPos);
+function startDrag(x,y){
+  if(tied) return;
+  dragging = true;
+  const r = dragEl.getBoundingClientRect();
+  offX = x-r.left; offY = y-r.top;
+  dragEl.style.cursor='grabbing';
+}
+function moveDrag(x,y){
+  if(!dragging) return;
+  const s = stage.getBoundingClientRect();
+  place(dragEl, x-s.left-offX, y-s.top-offY);
+}
+function endDrag(){
+  if(!dragging) return;
+  dragging=false; dragEl.style.cursor='grab';
+  const dz = dropZone.getBoundingClientRect();
+  const dr = dragEl.getBoundingClientRect();
+  const cx = dr.left+dr.width/2, cy = dr.top+dr.height/2;
+  const zx = dz.left+dz.width/2, zy = dz.top+dz.height/2;
+  if(Math.hypot(cx-zx,cy-zy) < 75 && !tied){
+    tied = true;
+    const s = stage.getBoundingClientRect();
+    place(dragEl, s.width/2-55, s.height/2-65);
+    dragEl.classList.add('tied');
+    dropZone.style.opacity='0';
+    petalBurst(cx,cy);
+    tieHint.textContent = "Tied. Some threads hold a lot.";
+    tieHint.classList.add('done');
+    setTimeout(()=>{
+      cardSection.classList.add('unlocked');
+      cardSection.scrollIntoView({behavior:'smooth'});
+    }, 700);
+  }
+}
+dragEl.addEventListener('pointerdown', e=>startDrag(e.clientX,e.clientY));
+addEventListener('pointermove', e=>moveDrag(e.clientX,e.clientY));
+addEventListener('pointerup', endDrag);
+
+// ---------------- personalized card ----------------
+const nameField = document.getElementById('nameField');
+const cardMsg = document.getElementById('cardMsg');
+const defaultMsg = "Whatever fights we've had, whatever distance comes between us — this thread says I've still got you. Always.";
+nameField.addEventListener('input', ()=>{
+  const n = nameField.value.trim();
+  cardMsg.textContent = n
+    ? `${n}, whatever fights we've had, whatever distance comes between us — this thread says I've still got you. Always.`
+    : defaultMsg;
+});
+const flipCard = document.getElementById('flipCard');
+flipCard.addEventListener('click', ()=> flipCard.classList.toggle('flipped'));
+
+// ---------------- floating gifts finale ----------------
+const giftEmojis = ['🎁','🪔','🌸','✨'];
+const giftLayer = document.getElementById('giftLayer');
+for(let i=0;i<14;i++){
+  const g = document.createElement('div');
+  g.className = 'gift';
+  g.textContent = giftEmojis[i % giftEmojis.length];
+  g.style.left = (Math.random()*90)+'%';
+  g.style.setProperty('--drift', (Math.random()*80-40)+'px');
+  g.style.animationDuration = (7+Math.random()*6)+'s';
+  g.style.animationDelay = (Math.random()*8)+'s';
+  giftLayer.appendChild(g);
+}
+</script>
+</body>
+</html>

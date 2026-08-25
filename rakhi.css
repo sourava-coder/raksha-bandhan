@@ -1,0 +1,207 @@
+:root{
+    --maroon:#5C0F1F; --maroon2:#7A1B2E; --beige:#E7D3AC; --cream:#FBF3E3;
+    --gold:#C9A227; --gold-light:#E6C158; --ink:#2A140C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Poppins', sans-serif; color:var(--ink); overflow-x:hidden; cursor:none; background:var(--cream); }
+  @media (hover:none){ body{ cursor:auto; } }
+  ::selection{ background:var(--gold); color:var(--maroon); }
+
+  #trailCanvas{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
+  #dot{
+    position:fixed; width:9px; height:9px; border-radius:50%; background:var(--gold-light);
+    pointer-events:none; z-index:10000; transform:translate(-50%,-50%); transition:transform .2s ease;
+    box-shadow:0 0 8px 2px rgba(230,193,88,.6);
+  }
+  @media (hover:none){ #dot{ display:none; } }
+
+  section{ position:relative; width:100%; padding:6vw; display:flex; flex-direction:column; align-items:center; }
+
+  /* ---------- hero / opening sequence ---------- */
+  #hero{
+    min-height:100svh; justify-content:center; align-items:center; text-align:center;
+    background:radial-gradient(circle at 50% 30%, var(--maroon2), var(--maroon) 75%);
+    color:var(--cream); overflow:hidden; position:relative;
+  }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px);} to{ opacity:1; transform:translateY(0); } }
+  .intro{ position:relative; width:100%; height:100svh; display:flex; align-items:center; justify-content:center; }
+  .intro > *{ position:absolute; opacity:0; pointer-events:none; }
+  .intro > *.show{ opacity:1; pointer-events:auto; }
+
+  .intro-loading{
+    font-family:'Cormorant Garamond'; font-style:italic; font-size:clamp(1.1rem,2.6vw,1.5rem);
+    color:var(--gold-light); letter-spacing:.05em; transition:opacity .6s ease;
+  }
+  .intro-loading .dots span{ animation:dotblink 1.4s ease-in-out infinite; }
+  .intro-loading .dots span:nth-child(2){ animation-delay:.2s; }
+  .intro-loading .dots span:nth-child(3){ animation-delay:.4s; }
+  @keyframes dotblink{ 0%,100%{ opacity:.2; } 50%{ opacity:1; } }
+
+  .intro-gift{
+    font-size:5rem; cursor:pointer; transition:opacity .5s ease, transform .2s ease;
+    display:flex; flex-direction:column; align-items:center; gap:1rem;
+  }
+  .intro-gift.show{ animation:giftshake 1.1s ease-in-out infinite; }
+  .intro-gift:active{ transform:scale(.92); }
+  @keyframes giftshake{
+    0%,100%{ transform:rotate(0deg);} 20%{ transform:rotate(-8deg);} 40%{ transform:rotate(8deg);}
+    60%{ transform:rotate(-6deg);} 80%{ transform:rotate(6deg);}
+  }
+  .gift-hint{
+    font-family:'Cormorant Garamond'; font-style:italic; font-size:.95rem; color:var(--gold-light);
+  }
+
+  .thread-half{
+    width:38vw; max-width:320px; height:2px; background:linear-gradient(90deg, transparent, var(--gold-light));
+    top:50%; transition:transform 1s cubic-bezier(.2,.8,.2,1);
+  }
+  .thread-left{ left:0; transform:translateX(-100%); }
+  .thread-left.show{ transform:translateX(0); }
+  .thread-right{ right:0; background:linear-gradient(270deg, transparent, var(--gold-light)); transform:translateX(100%); }
+  .thread-right.show{ transform:translateX(0); }
+
+  .intro-rakhi{
+    width:min(38vw, 160px); transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
+    transform:scale(.4) translateY(0);
+  }
+  .intro-rakhi.show{ opacity:1; transform:scale(1) translateY(0); }
+  .intro-rakhi.settled{ transform:scale(.85) translateY(70px); }
+
+  .intro-wrist{ top:62%; width:min(46vw, 190px); transition:opacity .7s ease; }
+
+  .intro-letter{
+    width:min(84vw, 380px); background:var(--cream); border-radius:14px; border:1px solid var(--gold);
+    padding:2.2rem 1.8rem; box-shadow:0 20px 60px -18px rgba(0,0,0,.5);
+    transform:scaleY(0); transform-origin:top center; transition:transform .7s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
+  }
+  .intro-letter.show{ transform:scaleY(1); }
+  .letter-text{
+    font-family:'Yatra One'; font-size:1.15rem; line-height:1.7; color:var(--maroon);
+    opacity:0; transition:opacity .6s ease .4s;
+  }
+  .intro-letter.show .letter-text{ opacity:1; }
+
+  .intro-finale{ display:flex; flex-direction:column; align-items:center; gap:.5rem; transition:opacity .8s ease; }
+  .finale-heart{ font-size:2.4rem; }
+  .finale-title{
+    font-family:'Yatra One'; font-size:clamp(2rem,6vw,3rem); color:var(--cream); text-shadow:0 3px 0 var(--gold);
+  }
+  .finale-hindi{ font-family:'Noto Serif Devanagari'; font-weight:600; color:var(--gold-light); font-size:1.1rem; }
+
+  .intro-scrollcue{
+    bottom:6vh; top:auto; font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold-light);
+    transition:opacity .8s ease;
+  }
+
+  /* ---------- rakhi showcase ---------- */
+  #showcase{ background:var(--cream); padding-top:6rem; padding-bottom:6rem; text-align:center; }
+  .rakhi-slot{ width:min(60vw, 260px); margin:0 auto; animation:sway 4.5s ease-in-out infinite; transform-origin:top center; }
+  @keyframes sway{ 0%,100%{ transform:rotate(-3deg);} 50%{ transform:rotate(3deg);} }
+  .showcase-caption{ margin-top:2rem; font-family:'Cormorant Garamond'; font-style:italic; font-size:1.2rem; color:var(--maroon2); }
+
+  /* ---------- tie interaction ---------- */
+  #tie{ background:var(--gold-light); min-height:100svh; justify-content:center; text-align:center; padding:6rem 6vw; }
+  .tie-title{ font-family:'Yatra One'; font-size:clamp(1.8rem,4.4vw,2.7rem); color:var(--maroon); margin-bottom:.5rem; }
+  .tie-sub{ font-family:'Cormorant Garamond'; font-style:italic; opacity:.75; margin-bottom:2.8rem; font-size:1.05rem; }
+  .tie-stage{
+    position:relative; width:min(90vw, 460px); height:340px;
+    background:var(--cream); border-radius:24px; border:1px solid rgba(92,15,31,.15);
+    box-shadow:0 20px 50px -20px rgba(92,15,31,.35);
+    display:flex; align-items:center; justify-content:center; touch-action:none;
+  }
+  #wrist{ width:170px; opacity:.9; }
+  #dragRakhi{ position:absolute; width:110px; cursor:grab; touch-action:none; transition:transform .25s ease; }
+  #dragRakhi.tied{ animation:settle .5s ease forwards; }
+  @keyframes settle{ 0%{ transform:scale(1.08);} 60%{ transform:scale(.92);} 100%{ transform:scale(1);} }
+  .drop-zone{ position:absolute; width:140px; height:140px; border-radius:50%; border:2px dashed rgba(92,15,31,.3); }
+  .hint{ margin-top:1.6rem; font-family:'Cormorant Garamond'; font-style:italic; font-size:1.05rem; color:var(--maroon2); }
+  .hint.done{ color:var(--maroon); font-weight:600; }
+
+  /* ---------- name + card thread column ---------- */
+  #card-section{
+    background:linear-gradient(180deg, var(--maroon) 0%, var(--maroon2) 38%, var(--beige) 100%);
+    min-height:100svh; padding:6rem 6vw 5rem;
+    opacity:1; transform:translateY(24px); pointer-events:none;
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  #card-section.unlocked{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .card-title{ font-family:'Yatra One'; font-size:clamp(1.8rem,4.2vw,2.5rem); color:var(--cream); margin-bottom:.4rem; text-align:center; }
+  .card-sub{ font-family:'Cormorant Garamond'; font-style:italic; color:var(--gold-light); margin-bottom:1rem; text-align:center; }
+
+  .thread-column{ position:relative; display:flex; flex-direction:column; align-items:center; }
+  .thread-column::before{
+    content:''; position:absolute; top:0; bottom:0; left:50%; width:2px;
+    background:linear-gradient(180deg, var(--gold-light), var(--gold) 60%, transparent);
+    transform:translateX(-50%); z-index:0;
+  }
+  .thread-bead{
+    width:14px; height:14px; border-radius:50%; background:var(--gold-light);
+    box-shadow:0 0 10px 2px rgba(230,193,88,.5); margin:1.4rem 0; position:relative; z-index:1;
+  }
+
+  .name-input{ text-align:center; position:relative; z-index:1; background:var(--maroon2); padding:1.2rem 2rem; border-radius:100px; border:1px solid var(--gold); }
+  .name-input label{ display:block; font-size:.68rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold-light); margin-bottom:.5rem; }
+  .name-input input{
+    font-family:'Yatra One'; font-size:1.3rem; text-align:center; color:var(--cream);
+    background:transparent; border:none; border-bottom:2px solid var(--gold); padding:.3rem .5rem;
+    width:min(70vw, 240px); outline:none;
+  }
+  .name-input input::placeholder{ color:rgba(251,243,227,.4); font-family:'Poppins'; font-size:.95rem; }
+
+  .flip-card{
+    width:min(94vw, 460px); height:420px; perspective:1800px; cursor:pointer; position:relative; z-index:1;
+    margin-top:1.6rem;
+  }
+  .flip-inner{
+    position:relative; width:100%; height:100%; transition:transform 1s cubic-bezier(.2,.8,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flip-card.flipped .flip-inner{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:20px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:2.4rem; text-align:center; box-shadow:0 26px 60px -20px rgba(0,0,0,.5);
+    overflow:hidden;
+  }
+  .face.front{
+    background:radial-gradient(circle at 30% 20%, var(--maroon2), var(--maroon) 70%);
+    border:1px solid var(--gold);
+  }
+  .face.front::after{
+    content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(120deg, transparent, rgba(230,193,88,.25), transparent);
+    animation:shine 3.2s ease-in-out infinite;
+  }
+  @keyframes shine{ 0%{ left:-60%; } 50%,100%{ left:120%; } }
+  .face.front .rakhi-mini{ width:100px; margin-bottom:1.4rem; }
+  .face.front p{ font-family:'Yatra One'; font-size:1.5rem; color:var(--cream); }
+  .face.front .tap{ margin-top:1.8rem; font-family:'Cormorant Garamond'; font-style:italic; font-size:.85rem; color:var(--gold-light); }
+  .face.back{ background:var(--cream); transform:rotateY(180deg); border:1px solid var(--gold); }
+  .face.back .msg{ font-family:'Yatra One'; font-size:1.3rem; line-height:1.75; color:var(--maroon); }
+  .face.back .sign{ margin-top:1.6rem; font-family:'Cormorant Garamond'; font-style:italic; font-size:.95rem; color:var(--maroon2); opacity:.8; }
+
+  /* ---------- gifts finale ---------- */
+  #finale{
+    background:var(--maroon); min-height:70vh; justify-content:center; text-align:center;
+    overflow:hidden; padding:5rem 6vw 3rem;
+  }
+  .finale-text{ font-family:'Yatra One'; font-size:clamp(1.6rem,4vw,2.3rem); color:var(--cream); z-index:2; }
+  .finale-sub{ font-family:'Cormorant Garamond'; font-style:italic; color:var(--gold-light); margin-top:.7rem; z-index:2; }
+  .gift{
+    position:absolute; bottom:-40px; font-size:1.8rem; opacity:.9;
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.9; }
+    90%{ opacity:.7; }
+    100%{ transform:translateY(-70vh) translateX(var(--drift,20px)) rotate(20deg); opacity:0; }
+  }
+
+  footer{
+    background:var(--maroon); padding:0 6vw 3rem; text-align:center;
+    font-family:'Cormorant Garamond'; font-style:italic; font-size:.9rem; color:rgba(251,243,227,.6);
+  }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
