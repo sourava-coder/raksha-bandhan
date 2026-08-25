@@ -24,7 +24,7 @@ Google Fonts
 
 ## Getting Started
 Clone the repository
-git clone https://github.com/sourav-coder/raksha-bandhan.git
+git clone https://github.com/sourava-coder/raksha-bandhan.git
 Open the project
 cd raksha-bandhan
 
@@ -83,5 +83,5 @@ Safari
 ## License
 This project is free to use, modify, and customize for personal and educational purposes.
 
-## SOURAV CODER
+## SOURAVA CODER
 Created as an interactive digital Raksha Bandhan experience.
